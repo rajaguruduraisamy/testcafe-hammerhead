@@ -16,7 +16,7 @@ interface Session {
     handleFileDownload (): void;
 }
 
-declare module 'testcafe-hammerhead' {
+declare module '@rajaguruduraisamy/testcafe-hammerhead' {
     /** The Proxy class used to create a web-proxy **/
     export class Proxy {
         /** Creates a web proxy instance **/
