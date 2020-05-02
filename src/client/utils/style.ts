@@ -326,14 +326,17 @@ export function getOffset (el) {
 }
 
 export function isElementVisible (el, doc) {
-    if (!domUtils.isElementInDocument(el, doc))
+    if (!domUtils.isElementInDocument(el, doc) && doc != domUtils.findDocument(el))
         return false;
 
     while (el) {
         if (get(el, 'display', doc) === 'none' || get(el, 'visibility', doc) === 'hidden')
             return false;
-
         el = nativeMethods.nodeParentNodeGetter.call(el);
+        
+        while (!domUtils.isHtmlElement(el)) {
+            el = nativeMethods.nodeParentNodeGetter.call(el);
+        }
     }
 
     return true;
