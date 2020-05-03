@@ -325,6 +325,13 @@ export function getOffset (el) {
     };
 }
 
+function findParentOrHost(el, doc) {
+    const parentNode = nativeMethods.nodeParentNodeGetter.call(el);
+    
+    // eslint-disable-next-line no-restricted-properties
+    return (parentNode && parentNode.host && parentNode.nodeType === 11) ? parentNode.host : parentNode === doc ? null : parentNode;
+}
+
 export function isElementVisible (el, doc) {
     if (!domUtils.isElementInDocument(el, doc) && doc != domUtils.findDocument(el))
         return false;
@@ -332,11 +339,7 @@ export function isElementVisible (el, doc) {
     while (el) {
         if (get(el, 'display', doc) === 'none' || get(el, 'visibility', doc) === 'hidden')
             return false;
-        el = nativeMethods.nodeParentNodeGetter.call(el);
-        
-        while (!domUtils.isHtmlElement(el)) {
-            el = nativeMethods.nodeParentNodeGetter.call(el);
-        }
+        el = findParentOrHost(el, doc);
     }
 
     return true;
